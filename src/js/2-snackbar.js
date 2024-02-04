@@ -12,15 +12,16 @@ form.addEventListener('submit', (event) => {
     const delay = parseInt(inputDelay.value);
 
     const promise = new Promise((resolve, reject) => {
-        if (radioBtnChecked.value == "fulfilled"){
-            setTimeout(() => {
-                resolve(delay)
-            }, delay);
-        } else {
-            setTimeout(() => {
-                reject(delay)
-            }, delay);
+
+        const callback = () => {
+            if (radioBtnChecked.value == 'fulfilled'){
+                resolve(delay);
+            } else {
+                reject(delay);
+            }
         }
+
+        setTimeout(callback, delay);
     });
 
     promise.then(delay => {
@@ -29,13 +30,12 @@ form.addEventListener('submit', (event) => {
         position: "topCenter",})
     })
     .catch(delay => {
-        iziToast.warning({
+        iziToast.error({
             title: '❌',
             message: ` Rejected promise in ${delay}ms`,
             position: "topCenter"
         })
     })
 
-    inputDelay.value = '';
-    radioBtnChecked.checked = false;
+    form.reset();
 })
